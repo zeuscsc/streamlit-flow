@@ -34,9 +34,30 @@ const ReactFlowComponent = (props) => {
         .catch(err => console.log(err))
     }, []);
 
+//     const onConnect = useCallback(
+//     params => setEdges(eds => addEdge({...params, animated:props.args["animateNewEdges"]}, eds)),
+//     []
+//     )
+
+//  get edge info when connect
     const onConnect = useCallback(
-    params => setEdges(eds => addEdge({...params, animated:props.args["animateNewEdges"]}, eds)),
-    []
+        params => {
+            // Add the edge with potential animation properties as before
+            setEdges(eds => {
+                const newEdges = addEdge({...params, animated:props.args["animateNewEdges"]}, eds);
+                // Check if we need to send out edge information upon connecting
+                if (props.args['getEdgeOnConnect']) {
+                    Streamlit.setComponentValue({
+                        elementType: 'edge_connect',
+                        source: params.source,
+                        target: params.target,
+                        animated: props.args["animateNewEdges"]
+                    });
+                }
+                return newEdges;
+            });
+        },
+        [] // Dependencies remain empty as the function only uses props.args which are assumed not to change frequently.
     )
 
     const onNodeClick = (e, node) => {

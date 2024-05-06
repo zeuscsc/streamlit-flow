@@ -5,7 +5,7 @@ from typing import List
 
 from .interfaces import StreamlitFlowNode, StreamlitFlowEdge
 
-_RELEASE = False
+_RELEASE = True
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -31,6 +31,7 @@ def streamlit_flow( nodes:List[StreamlitFlowNode],
                     layout_horizontal_spacing:int=150,
                     get_node_on_click:bool=False,
                     get_edge_on_click:bool=False,
+                    get_edge_on_connect:bool=False,
                     key=None):
     
     assert direction in ["manual", "up", "down", "left", "right"], f"direction must be one of ['manual', 'up', 'down', 'left', 'right']. Got {direction}"
@@ -48,5 +49,6 @@ def streamlit_flow( nodes:List[StreamlitFlowNode],
                                         layoutOptions={"direction": direction.upper(), "defaultHeight": layout_vertical_spacing, "defaultWidth": layout_horizontal_spacing},
                                         getNodeOnClick=get_node_on_click,
                                         getEdgeOnClick=get_edge_on_click,
+                                        getEdgeOnConnect=get_edge_on_connect,
                                         key=key)
     return component_value
